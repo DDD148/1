@@ -14,11 +14,17 @@ try:
     else:
         print("📋 检测到改动：")
         print(changes)
-        print("\n📤 执行 git add .")
+        print()
+        # 重点：手动输入提交备注
+        default_msg = f"自动更新 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+        user_input = input(f"📝 输入提交备注（直接回车使用默认：{default_msg}）\n> ")
+        commit_msg = user_input.strip() if user_input.strip() else default_msg
+
+        print(f"\n✅ 使用提交信息：{commit_msg}")
+        print("📤 执行 git add .")
         run_cmd(["git", "add", "."])
-        msg = f"自动更新 {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
-        print(f"📝 提交备注：{msg}")
-        commit_res = run_cmd(["git", "commit", "-m", msg])
+
+        commit_res = run_cmd(["git", "commit", "-m", commit_msg])
         if commit_res.returncode != 0:
             print("❌ commit失败：", commit_res.stderr)
         else:
